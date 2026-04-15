@@ -1,0 +1,124 @@
+---
+
+Making Sense of SQL: DDL, DML, and the Language of Databases
+A product professional's first encounter with Structured Query Language and what it all means.
+Coming from a product background, I had heard of SQL many times, in conversations about data pipelines, analytics dashboards, and backend systems. This week, I finally met it face to face. Here is what I have learned.
+
+---
+
+What is SQL, and why does structure matter?
+SQL (Structured Query Language) is the standard language used to communicate with relational databases. A relational database stores information in tables : rows and columns, much like a spreadsheet , but with strict rules about data types, relationships, and how data is entered or retrieved.
+Within SQL, two major categories govern what you can do: DDL and DML.
+DDL - Data Definition Language
+Defines the structure of the database which is the blueprint before any data goes in.
+They include : create , alter, drop and truncate
+DML - Data Manipulation Language
+Manipulates the data inside the structure by adding values, changing values , and removing them.
+They include: insert, update, delete and select
+The main difference is that DDL changes the shape of the database; DML changes the content.
+Commands Terms Deep dive;
+CREATE TABLE
+This command defines a new table with column names, data types, and constraints.
+
+create table students(
+student_id INT primary key,
+first_name VARCHAR(50) not null,
+last_name VARCHAR(50) not null,
+gender VARCHAR(1)not null,
+date_of_birth DATE ,
+class VARCHAR(10),
+city VARCHAR(50) );
+The table above will contain column such as student_id, first_name…etc
+2. INSERT - adding a row or
+This command allows us to add data to the created table
+insert into students (student_id,first_name,last_name, gender,date_of_birth,class,city)
+values 
+(1, 'Amina', 'Wanjiku','F','2008-03-12','Form 3','Nairobi');
+Column names must match the values in the same order. SQL does not accept spaces in names, so column names use underscores.
+3. UPDATE - changing existing data
+Modifies a record/data that already exists. Always use a WHERE clause so as to limit the value that you need to modify or else every row in the table gets changed.
+update students 
+set city= 'Nairobi'
+where student_id=5;
+
+- Command will only update the city location for student with id =5
+4. DELETE 
+Removes one or more rows. Like UPDATE, a missing WHERE clause deletes everything, so it must always be included.
+DELETE FROM results WHERE result_id = 1;
+
+-This command will change results related to result_id=1
+Understanding Data Types
+When creating a table, every column must be assigned a data type. This tells SQL exactly what kind of information that column will hold , and it enforces that rule on every row inserted. Choosing the right data type keeps your data clean, consistent, and efficient to query.
+NUMERIC
+For numeric values;
+- INT- Whole numbers. No decimals. Good for IDs, counts, scores.
+- marks INT
+- SERIAL- Auto-incrementing integer. SQL assigns the next number automatically.
+- id SERIAL
+- DECIMAL- Numbers with decimal points. Used for prices or precise values.
+- price DECIMAL(8,2)
+TEXT 
+These are strictly used for text values.Theyinclude;
+VARCHAR(n)- Variable-length text up to n characters. The most common text type. VARCHAR(2)- 
+CHAR(n)- Fixed-length text. Always occupies exactly n characters, padded if shorter. CHAR(3)-only 2 characters
+BOOLEAN
+True or false only. Useful for flags like is_active or is_paid. is_active
+
+---
+
+Filtering with WHERE
+The WHERE clause narrows down which rows a query affects. Several operators make filtering precise and powerful:
+=exact match
+
+select * from students 
+where gender= 'F';
+
+- shows female students
+2. >greater than
+3. <less than
+4. BETWEEN- range (inclusive)
+ select subject_id,exam_date
+from exam_results
+where exam_date between '2024-03-15' and '2024-03-18';
+
+exams that took place between 15th and 18th March 2024
+5. IN-list of values
+select student_id, first_name,city
+from students
+where city in ('Nairobi','Mombasa','Kisumu');
+
+- shows students who live in Nairobi, Mombasa and Kisumu
+6. LIKE- pattern matching
+select *from subjects
+where subject_name like '%Studies%';
+
+shows subjects that contain 'Studies'
+
+---
+
+d results for specific subjects SELECT * FROM results WHERE subject_id IN (1, 3, 5); - LIKE: find grades starting with 'A' (A, A+, A-) SELECT * FROM results WHERE grade LIKE 'A%';
+
+---
+
+Transforming data with CASE WHEN
+CASE WHEN is SQL's if/else logic , it reads a value and returns a label without changing the underlying table. 
+For example:
+SELECT student_id, marks, CASE WHEN marks >= 70 THEN 'Distinction' WHEN marks >= 50 THEN 'Pass' ELSE 'Fail' END AS performance FROM results;
+The result is a new derived column called performance that appears only in the query output - the original marks column in the table stays untouched. This makes CASE WHEN very useful for reporting and segmentation.
+select 
+result_id,
+student_id
+marks,
+case 
+ when marks >=80 then 'Distinction'
+  when marks >=60 then 'Merit'
+   when marks >=40 then 'Pass'
+else 'Fail'
+end as perfomance
+from exam_results;
+
+---
+
+Reflection: what this week felt like
+The most challenging part was internalizing the order of operations, understanding that you cannot insert data before the table exists, and that every UPDATE or DELETE without a WHERE clause is a silent disaster waiting to happen. SQL does exactly what you tell it, nothing more.What I found genuinely interesting was how readable the language is. Keywords like SELECT, FROM, WHERE, and INSERT INTO almost read like plain instructions , yet behind them lies a precise, powerful system.
+The CASE WHEN statement was a highlight, it felt like the moment SQL stopped being just a retrieval tool and became an analytical one. Turning raw marks into performance labels with a few lines of logic is exactly the kind of insight I used to rely on others to produce. Now I can do it myself.
