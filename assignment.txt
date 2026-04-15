@@ -1,0 +1,114 @@
+Making Sense of SQL: DDL, DML, and the Language of Databases
+
+A product professional’s first encounter with Structured Query Language and what it all means.
+
+Introduction
+SQL is the standard language used to communicate with relational databases. Relational databases store information in tables made of rows and columns, similar to a spreadsheet, but with strict rules about data types, relationships, and how data is entered or retrieved.
+
+When you learn SQL, it helps to separate the commands that define the structure of the database from the commands that change its content. This is the core distinction between Data Definition Language (DDL) and Data Manipulation Language (DML).
+
+DDL: Defining the Database
+DDL commands shape the database itself. They create tables, modify columns, and remove structures.
+
+Key DDL commands:
+- CREATE TABLE: Define a new table with columns, data types, and constraints.
+- ALTER TABLE: Add, rename, or remove columns and change table definitions.
+- DROP TABLE: Delete an entire table and its data.
+- TRUNCATE: Remove all rows from a table without deleting the table structure.
+
+Example:
+create table students(
+  student_id INT primary key,
+  first_name VARCHAR(50) not null,
+  last_name VARCHAR(50) not null,
+  gender VARCHAR(1) not null,
+  date_of_birth DATE,
+  class VARCHAR(10),
+  city VARCHAR(50)
+);
+
+This example creates a table called `students` with columns for student ID, name, gender, birth date, class, and city.
+
+DML: Manipulating Data
+DML commands work with the rows inside existing tables. They add records, change values, delete entries, and retrieve information.
+
+Key DML commands:
+- INSERT: Add new rows to a table.
+- UPDATE: Modify existing rows.
+- DELETE: Remove rows from a table.
+- SELECT: Query rows and return results.
+
+Example:
+insert into students (student_id, first_name, last_name, gender, date_of_birth, class, city)
+values (1, 'Amina', 'Wanjiku', 'F', '2008-03-12', 'Form 3', 'Nairobi');
+
+Columns must match the values in the same order. SQL uses underscores instead of spaces in names.
+
+Example update:
+update students
+set city = 'Nairobi'
+where student_id = 5;
+
+Example delete:
+delete from exam_results
+where result_id = 9;
+
+Understanding Data Types
+Every column in a table must have a data type. The data type defines what kind of information the column can hold and helps keep the database consistent.
+
+Common data types:
+- INT: Whole numbers, used for IDs, counts, and scores.
+- SERIAL: Auto-incrementing integer values.
+- DECIMAL(p, s): Precise numbers with decimal places, often used for prices.
+- VARCHAR(n): Variable-length text up to n characters.
+- CHAR(n): Fixed-length text.
+- BOOLEAN: True or false values.
+- DATE: Calendar date values.
+
+Choosing the right data type makes your data easier to manage and query.
+
+Filtering with WHERE
+The WHERE clause narrows the rows affected by a query. It is essential for selecting, updating, or deleting only the rows you want.
+
+Common operators:
+- =  exact match
+- >  greater than
+- <  less than
+- BETWEEN  range checks (inclusive)
+- IN  specific list of values
+- NOT IN  values to exclude
+- LIKE  pattern matching
+
+Examples:
+select * from students where class = 'Form 4';
+select * from subjects where department = 'Sciences';
+select * from exam_results where marks >= 70;
+select student_id, first_name, city from students where city in ('Nairobi', 'Mombasa', 'Kisumu');
+select student_id, first_name, class from students where class not in ('Form 2', 'Form 3');
+
+Transforming Data with CASE WHEN
+CASE WHEN is SQL’s conditional logic. It allows you to create derived values in query results without changing the underlying table.
+
+Example:
+select
+  student_id,
+  marks,
+  case
+    when marks >= 80 then 'Distinction'
+    when marks >= 60 then 'Merit'
+    when marks >= 40 then 'Pass'
+    else 'Fail'
+  end as performance
+from exam_results;
+
+This query returns a new `performance` column based on the student’s marks.
+
+Reflection
+The hardest part of learning SQL is understanding the order of operations: the database structure must exist before you can insert data, and every UPDATE or DELETE without a WHERE clause can change the wrong rows.
+
+SQL is powerful because it is both readable and precise. Keywords like SELECT, FROM, WHERE, and INSERT INTO look like plain English, while enabling complex data operations. CASE WHEN is especially useful because it turns SQL into an analytical tool, not just a retrieval language.
+
+Conclusion
+SQL is a foundational skill for working with relational data. By understanding DDL and DML, choosing the right data types, and using WHERE filters effectively, you can build and manage clean, reliable databases.
+
+This article captures the essential ideas behind SQL structure, data manipulation, and the practical commands that make working with databases manageable and expressive.
